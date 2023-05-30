@@ -4,8 +4,9 @@ namespace Monitor_detection_Plugin;
 
 public class Monitor_plugin : IPlugin2
 {
-    private MonitorSensor[] _sensor = Array.Empty<MonitorSensor>();
     public string Name => "Dock status";
+
+    private MonitorSensor[] sensors = Array.Empty<MonitorSensor>();
 
     public void Initialize()
     {
@@ -13,13 +14,13 @@ public class Monitor_plugin : IPlugin2
 
     public void Close()
     {
-        _sensor = Array.Empty<MonitorSensor>();
+        sensors = Array.Empty<MonitorSensor>();
     }
 
     public void Load(IPluginSensorsContainer container)
     {
-        _sensor = MonitorSensor.GetBatterySensors();
-        foreach (var sensor in _sensor)
+        sensors = MonitorSensor.GetBatterySensors();
+        foreach (var sensor in sensors)
         {
             sensor.Value = MonitorSensor.get_status();
             container.TempSensors.Add(sensor);
@@ -29,7 +30,7 @@ public class Monitor_plugin : IPlugin2
 
     public void Update()
     {
-        foreach (var sensor in _sensor)
+        foreach (var sensor in sensors)
         {
             sensor.Value = MonitorSensor.get_status();
         }
