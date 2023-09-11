@@ -1,23 +1,10 @@
 ﻿using FanControl.Plugins;
-using System.Windows.Forms;
 
-namespace Monitor_detection_Plugin;
+namespace FanControl.Monitor_detection_Plugin;
 
 
 public class MonitorSensor : IPluginSensor
 {
-    internal string Type { get; }
-    
-    internal int Index { get; set; }
-    
-    public string Name { get; }
-
-    public float? Value { get; internal set; }
-
-    public string Id { get; }
-
-    public void Update() { }
-
     internal MonitorSensor(int index, string type, string id, string name)
     {
         Index = index;
@@ -26,28 +13,34 @@ public class MonitorSensor : IPluginSensor
         Name = name;
     }
 
-    static public float get_status()
+    /// <summary>
+    /// Converts monitor count to temperature.
+    /// </summary>
+    /// <returns>Value returned is how many monitors are connected, 1C one monitor, 2C two monitors etc.</returns>
+    static public float Get_status()
     {
-        var monitor_count = System.Windows.Forms.SystemInformation.MonitorCount;
-        if (monitor_count > 1)
-        {
-            return 100f;
-        }
-        else
-        {
-            return 0f;
-        }
-        
-    }
 
+        var monitor_count = SystemInformation.MonitorCount;
+        
+        return monitor_count;
+    }
     static public MonitorSensor[] GetBatterySensors()
     {
         var list = new List<MonitorSensor>();
-        var _sensor = new MonitorSensor(1, "Temperature", "bat_Temperature", "ac status");
-
+        var _sensor = new MonitorSensor(1, "Temperature", "bat_Temperature", "monitor count");
+       
         list.Add(_sensor);
         return list.ToArray();
 
     }
-    
+    internal string Type { get; }
+    internal int Index { get; set; }
+    public string Name { get; }
+
+    public float? Value { get; internal set; }
+
+    public string Id { get; }
+
+    public void Update() { }
+
 };

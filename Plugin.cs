@@ -1,12 +1,11 @@
 using FanControl.Plugins;
 
-namespace Monitor_detection_Plugin;
+namespace FanControl.Monitor_detection_Plugin;
 
 public class Monitor_plugin : IPlugin2
 {
-    public string Name => "Dock status";
-
-    private MonitorSensor[] sensors = Array.Empty<MonitorSensor>();
+    private MonitorSensor[] _sensor = Array.Empty<MonitorSensor>();
+    public string Name => "Monitor Count";
 
     public void Initialize()
     {
@@ -14,15 +13,15 @@ public class Monitor_plugin : IPlugin2
 
     public void Close()
     {
-        sensors = Array.Empty<MonitorSensor>();
+        _sensor = Array.Empty<MonitorSensor>();
     }
 
     public void Load(IPluginSensorsContainer container)
     {
-        sensors = MonitorSensor.GetBatterySensors();
-        foreach (var sensor in sensors)
+        _sensor = MonitorSensor.GetBatterySensors();
+        foreach (var sensor in _sensor)
         {
-            sensor.Value = MonitorSensor.get_status();
+            sensor.Value = MonitorSensor.Get_status();
             container.TempSensors.Add(sensor);
 
         }
@@ -30,9 +29,9 @@ public class Monitor_plugin : IPlugin2
 
     public void Update()
     {
-        foreach (var sensor in sensors)
+        foreach (var sensor in _sensor)
         {
-            sensor.Value = MonitorSensor.get_status();
+            sensor.Value = MonitorSensor.Get_status();
         }
     }
 }
